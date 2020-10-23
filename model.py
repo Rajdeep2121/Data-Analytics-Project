@@ -6,6 +6,7 @@
 """
 # Importing the needed libraries
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 import numpy as np
@@ -49,8 +50,8 @@ class Model:
 
         # Predicting the value
         self.dfres = dtree.predict(self.testX)
-        #self.score = dtree.score(self.Y, self.dfres)
-        #print(self.score)
+        self.score = accuracy_score(self.Y, self.dfres[:-1])
+        print(self.score*100)
 
         self.res = self.dfres[-1]
 
@@ -61,7 +62,7 @@ class Model:
 # 0,address,name,online_order,book_table,rate,votes,location,rest_type,cuisines,cost,menu_item,listed_in(city)
 
 # Excuse the poor quality of the code
-new_row = {'address': '', 'name': '', 'online_order': '', 'book_table': '', 'rate': '', 'votes': '', 'location': 'Banashankari', 'rest_type': 'Quick Bites', 'cuisines': 'North Indian','cost': '', 'menu_item': '', 'listed_in': ''}
+new_row = {'address': '', 'name': '', 'online_order': '', 'book_table': '', 'rate': '', 'votes': '', 'location': 'Koramangala 5th Block', 'rest_type': 'Fine Dining', 'cuisines': 'North Indian','cost': '', 'menu_item': '', 'listed_in': ''}
 o = Model()
 
 # check = new_df.join(mytemp)
