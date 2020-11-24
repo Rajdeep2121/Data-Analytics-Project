@@ -15,46 +15,45 @@ import math
 class CleanData:
     def __init__(self):
         #Now we shall read the dataset in this file
-        self.old_df = pd.read_csv('zomato_cleaned.csv')
+        self.old_df = pd.read_csv('zomato.csv')
         #Variable for sampling (10%)
         self.p = 0.01
     #Function for sampling data
     def data_sample(self):
-        self.df = pd.read_csv('zomato_cleaned.csv', header=0, skiprows=lambda i: i>0 and random.random() > self.p)
+        self.df = pd.read_csv('zomato.csv', header=0, skiprows=lambda i: i>0 and random.random() > self.p)
         return self.df
     #Specialised functions
     def fill_cost(self):
-        df.rename(columns = {'approx_cost(for two people)':'cost'},inplace=True)
-        #print(df.isna().sum())
+        self.old_df.rename(columns = {'approx_cost(for two people)':'cost'},inplace=True)
         #Now for regression to replace values
-        rate_na_vals_df = df[df['cost'].isna()]
+        self.old_df['cost'] = self.old_df['cost'].apply(lambda row : str(row))
+        self.old_df['cost'] = self.old_df['cost'].apply(lambda row : row.replace(',',''))
+        self.old_df['cost'] = self.old_df['cost'].apply(lambda row : float(row))
+        rate_na_vals_df = self.old_df[self.old_df['cost'].isna()]
         rate_na_vals = rate_na_vals_df['rest_type'].to_numpy()
         #print(rate_na_vals)
-        temp_df = df.dropna()
+        temp_df = self.old_df.dropna()
         temp_df = temp_df.loc[temp_df['rest_type'].isin(rate_na_vals)]
         X = pd.get_dummies(data=temp_df['rest_type'],drop_first=True)
         #Add the variable
         temp_df = temp_df.join(X)
         temp_df.drop(columns=['rest_type'],inplace=True)
-        #print(df.head())
         #Now for proper Linear regression
         Y = pd.DataFrame(temp_df['cost'])
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.5, random_state = 0)
-        #print(X_test.shape)
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.3, random_state = 0)
         regr = linear_model.LinearRegression()
         regr.fit(X_train, Y_train)
         #Only for testing purposes
-        predicted = regr.predict(X_test)
         #I have used df in memory , but it is not advisable
         rest_type_x = pd.get_dummies(data = rate_na_vals_df['rest_type'],drop_first=True)
         cost_predicted = regr.predict(rest_type_x)
         cost_predicted = cost_predicted.reshape(-1)
-        cost_predicted = cost_predicted.astype(int)
+        cost_predicted = cost_predicted.astype(float)
         #print(cost_predicted)
         cost_series = pd.Series(cost_predicted)
         #print(df.index[df.isnull().any(axis=1)])
-        fill = pd.DataFrame(index=df.index[df.isnull().any(axis=1)], data=cost_predicted, columns=['cost'])
-        df = df.fillna(fill)
+        fill = pd.DataFrame(index=self.old_df.index[self.old_df.isnull().any(axis=1)], data=cost_predicted, columns=['cost'])
+        self.old_df = self.old_df.fillna(fill)
     #Here for decoration
     def morph_rest_type(self):
         req_rest_types = ['Quick Bites' , 'Casual Dining' , 'Fine Dining' , 'Bakery' , 'Bar' , 'Food Court' , 'Pub' , 'Microbrewerry']
@@ -115,7 +114,7 @@ class CleanData:
     #We need to fill the other empty rows also
     #Function for saving as CSV again
     def save_cleaned_file(self):
-        self.old_df.to_csv('zomato_cleaned.csv', sep=',')
+        self.old_df.to_csv('zomato.csv', sep=',')
 #Only for testing shall I use this
 #From the printing of the NA we can say
 #We do not require the 'favourite-dish' hence we can remove that
@@ -124,8 +123,9 @@ class CleanData:
 #Moreover two columns - phone number and dish liked are not possible to fill
 #We also do not require URL and listed_in(type)
 #Hence we shall remove these two columns entirely as they are not important to the analysis
-df = pd.read_csv('zomato_cleaned.csv')
-print(df.isna().sum())
+df = pd.read_csv('zomato.csv')
+obj = CleanData()
+obj.clean_data()
 #Let us consider a set of types we shall allow in the above
 #The following are what we shall consider 
 #Now we shall try and use regression to impute the missing values

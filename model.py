@@ -23,7 +23,7 @@ class Model:
         # Getting the X and Y training data
         self.X = pd.get_dummies(self.df[['location','cuisines','rest_type']],drop_first=True)
         # self.tempX = self.df.join(self.tempX)
-        self.Y = pd.DataFrame(self.df['cost'])
+        self.Y = pd.DataFrame(self.df['cost']).astype(int)
     
     # Method to create the model
     def create_model(self, req_value):
@@ -62,7 +62,7 @@ class Model:
 # 0,address,name,online_order,book_table,rate,votes,location,rest_type,cuisines,cost,menu_item,listed_in(city)
 
 # Excuse the poor quality of the code
-new_row = {'address': '', 'name': '', 'online_order': '', 'book_table': '', 'rate': '', 'votes': '', 'location': 'Koramangala 5th Block', 'rest_type': 'Fine Dining', 'cuisines': 'North Indian','cost': '', 'menu_item': '', 'listed_in': ''}
+new_row = {'address': '', 'name': '', 'online_order': '', 'book_table': '', 'rate': '', 'votes': '', 'location': 'Banashankari', 'rest_type': 'Fine Dining', 'cuisines': 'North Indian','cost': '', 'menu_item': '', 'listed_in': ''}
 o = Model()
 
 # check = new_df.join(mytemp)
