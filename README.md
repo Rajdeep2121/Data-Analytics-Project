@@ -6,7 +6,6 @@ from the website link here - https://www.kaggle.com/himanshupoddar/zomato-bangal
 
 Additionally we shall use a small sample of the dataset for visualisation (around 10%).
 
-The three files I have created are for their purposes as shown by the name.
 
 CLEANING:
 I have more or less cleaned the dataset.
@@ -15,6 +14,22 @@ We might need to use a model to clean it.
 Code is stored in 'clean.py'
 
 MODEL:
-Added a basic sklearn model that uses a Decision Tree to estimate the cost of a restaraunt given 
+Added an sklearn model that uses a Decision Tree to estimate the cost of a restaraunt given 
 features such as location , cuisine and type of restaraunt.
-However it might not be perfect , if possible please add more models for prediction of features such as - rate , location (if possible)
+Additionally a regression model has been used to clean 'ratings' column.
+
+VISUALISATIONS:
+A wide variety of visualisations have been performed on the dataset , all are present in the Jupyter Notebook file.
+
+STEPS ON RUNNING THE CODE:
+Ensure that the CSV is in the same folder or directory as all the python codes.
+If dataset is unclean , do the following -
+python3 clean.py
+The above will clean the dataset and save it as it is under the same name.
+Once done , run the Jupyter Notebook to obtain the different visualisations.
+
+To run the model simply type -
+python3 model.py
+
+
+NOTE - Dataset must be names as 'zomato.csv' else the code will not run.
