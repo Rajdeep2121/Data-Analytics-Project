@@ -37,4 +37,4 @@ python3 model.py
 
 
 
-**Note**- Dataset must be names as 'zomato.csv' else the code will not run.
+**Note**- Dataset must be named as 'zomato.csv' else the code will not run.
