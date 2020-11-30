@@ -28,8 +28,11 @@ python3 clean.py
 The above will clean the dataset and save it as it is under the same name.
 Once done , run the Jupyter Notebook to obtain the different visualisations.
 
-To run the model simply type -
+To run the model
+```bash
 python3 model.py
+```
+
 
 
 NOTE - Dataset must be names as 'zomato.csv' else the code will not run.
